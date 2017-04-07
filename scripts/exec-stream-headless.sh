@@ -43,7 +43,6 @@ trap _kill_procs SIGTERM
 
 
 # Start Xvfb
-echo $XSERVERNUM $XFORMAT
 Xvfb $XSERVERNUM -screen 1 $XFORMAT &
 xvfb=$!
 
@@ -53,8 +52,9 @@ node_modules/.bin/electron src/index  &
 electon=$!
 sleep $STARTUPTIME
 
-ffmpeg -y -f x11grab -framerate $FRAMERATE -video_size $RESOLUTION -i $XSERVERNUM \
--c:v libx264 -preset ultrafast -maxrate $MAXRATE -bufsize $BUFSIZE -g $GOP -f flv $STREAMHOST &
+# ffmpeg -y -f x11grab -framerate $FRAMERATE -video_size $RESOLUTION -i $XSERVERNUM  -c:v libx264 -preset ultrafast -maxrate $MAXRATE -bufsize $BUFSIZE -g $GOP -f flv $STREAMHOST &
+ffmpeg -y -video_size $RESOLUTION -framerate 30 -f x11grab -i $XSERVERNUM \
+-g $GOP $STREAMHOST &
 ffmpeg=$!
 
 wait $electon
