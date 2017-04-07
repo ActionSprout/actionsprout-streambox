@@ -10,28 +10,31 @@ const url = require('url')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-if(!process.env.HEIGHT)
+if(!process.env.WIDTH)
 {
-  process.env.HEIGHT = "1280";
+  process.env.WIDTH = "1280";
 }
 
 if(!process.env.HEIGHT)
 {
-  process.env.HEIGHT = "1280";
+  process.env.HEIGHT = "720";
 }
 
 if(!process.env.BROADCAST_END)
 {
   //TODO(Clark) Set this to something sensible like Four Hours
-  process.env.BROADCAST_END = 10;
+  process.env.BROADCAST_END = new Date().getTime() + 100;
 }
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: parseInt(process.env.width),
-    height:parseInt(process.env.height),
-    kiosk: true
+    width: 1280, //parseInt(process.env.width),
+    height: 720, //parseInt(process.env.height),
+    x: 0,
+    y: 0,
+    frame: false
+    //kiosk: true
   })
   mainWindow.setMenu(null)
 
@@ -76,6 +79,5 @@ app.on('activate', function () {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-setTimeout(app.quit, parseInt(process.env.BROADCAST_END) * 1000);
+const _length = parseInt(process.env.BROADCAST_END) - new Date().getTime();
+setTimeout(app.quit, _length * 1000);

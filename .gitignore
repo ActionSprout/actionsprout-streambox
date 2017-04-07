@@ -1,5 +1,5 @@
 bin/
-
+tmp/
 # Logs
 logs
 *.log

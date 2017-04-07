@@ -1,14 +1,24 @@
-#!/bin/bash
 
+### Use These Vars for Controlling what gets rendered and when
+#####!/bin/bash
+# If BROADCAST_END isn't defined, run test of 100 seconds
+# (plus the 10 second sleep to wait on electron's launch)
+if [ -z ${BROADCAST_END} ]; then
+  _NOW=$(date +%s)
+  BROADCAST_END=$(($_NOW + 110))
+fi
+
+#Tune this to make sure Electron is open
+STARTUPTIME=3
 ## Tweak these Vars for Streaming
 FRAMERATE=30
-WIDTH=1280
-HEIGHT=720
-RESOLUTION=$WIDTHx$HEIGHT
+export WIDTH=1280
+export HEIGHT=720
+RESOLUTION="$WIDTH"x"$HEIGHT"
 
 
 ## X Settings
-XFORMAT=$RESOLUTIONx24
+XFORMAT="$RESOLUTION"x24
 XSERVERNUM=:99
 
 ## FFMPEG Settings
@@ -33,18 +43,18 @@ trap _kill_procs SIGTERM
 
 
 # Start Xvfb
-Xvfb $XSERVERNUM -screen 0 $XFORMAT &
+echo $XSERVERNUM $XFORMAT
+Xvfb $XSERVERNUM -screen 1 $XFORMAT &
 xvfb=$!
 
 export DISPLAY=$XSERVERNUM
 
-node_modules/.bin/electron  &
+node_modules/.bin/electron src/index  &
 electon=$!
-sleep 10
+sleep $STARTUPTIME
 
-ffmpeg -y -f x11grab -video_size $RESOLUTION -framerate $FRAMERATE -i $XSERVERNUM \
--c:v libx264 -preset ultrafast -maxrate $MAXRATE -bufsize $BUFSIZE \
--vf "format=yuv420p" -g $GOP -f flv $STREAMHOST &
+ffmpeg -y -f x11grab -framerate $FRAMERATE -video_size $RESOLUTION -i $XSERVERNUM \
+-c:v libx264 -preset ultrafast -maxrate $MAXRATE -bufsize $BUFSIZE -g $GOP -f flv $STREAMHOST &
 ffmpeg=$!
 
 wait $electon
