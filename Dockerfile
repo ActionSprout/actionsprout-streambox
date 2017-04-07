@@ -1,8 +1,10 @@
-FROM ubuntu:latest
+FROM node:latest
+WORKDIR /app
 
 RUN apt-get update
-RUN apt-get install curl xvfb chromium-browser ffmpeg --assume-yes
+RUN apt-get install curl xvfb tar --assume-yes
+RUN mkdir /app
+ADD . /app
+RUN tar -xzvf bin/ffmpeg.tar.gz /bin
 
-ADD ./exec-stream-headless.sh /bin/exec-stream-headless.sh
-
-CMD /bin/exec-stream-headless.sh
+CMD scripts/exec-stream-headless.sh

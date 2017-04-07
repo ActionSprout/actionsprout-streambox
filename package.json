@@ -1,0 +1,22 @@
+{
+  "name": "actionsprout-streambox",
+  "version": "1.0.0",
+  "description": "Electron App to Stream Actionsprout Visualizations",
+  "main": "src/index.js",
+  "scripts": {
+    "entry": "electron src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OffByOneStudios/actionsprout-streambox.git"
+  },
+  "author": "Clark Rinker",
+  "license": "SEE LICENSE",
+  "bugs": {
+    "url": "https://github.com/OffByOneStudios/actionsprout-streambox/issues"
+  },
+  "homepage": "https://github.com/OffByOneStudios/actionsprout-streambox#readme",
+  "dependencies": {
+    "electron": "^1.6.2"
+  }
+}
